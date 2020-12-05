@@ -1,0 +1,25 @@
+version: 2.1
+orbs:
+  # https://circleci.com/developer/orbs/orb/circleci/node
+  node: circleci/node@4.1.0
+jobs:
+  test:
+    executor:
+      name: node/default
+      tag: 14.15.1
+    steps:
+    - checkout
+    - node/install-packages:
+        pkg-manager: npm
+    - run:
+        command: npm test
+        name: Run Mocha tests
+    - store_artifacts:
+        path: /tmp/test-results
+        destination: raw-test-output
+    - store_test_results:
+        path: /tmp/test-results
+workflows:
+  node-tests:
+    jobs:
+    - test
